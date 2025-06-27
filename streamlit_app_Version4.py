@@ -7,8 +7,10 @@ st.set_page_config(page_title="Feedback to Backlog Generator", layout="wide")
 openai_api_key = st.sidebar.text_input(
     "Enter your OpenAI API key", type="password", help="Get one at https://platform.openai.com/"
 )
+
+client = None
 if openai_api_key:
-    openai.api_key = openai_api_key
+    client = openai.OpenAI(api_key=openai_api_key)
 
 st.title("📝 Consumer Feedback to Product Backlog Generator")
 
@@ -56,7 +58,7 @@ if uploaded_file:
             )
 
             try:
-                response = openai.ChatCompletion.create(
+                response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[
                         {"role": "system", "content": "You are a helpful product manager."},
@@ -64,7 +66,7 @@ if uploaded_file:
                     ],
                     max_tokens=500,
                 )
-                insights = response["choices"][0]["message"]["content"]
+                insights = response.choices[0].message.content
             except Exception as e:
                 st.error(f"OpenAI error: {e}")
                 st.stop()
@@ -80,7 +82,7 @@ if uploaded_file:
             )
 
             try:
-                response2 = openai.ChatCompletion.create(
+                response2 = client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[
                         {"role": "system", "content": "You are a helpful product manager."},
@@ -88,7 +90,7 @@ if uploaded_file:
                     ],
                     max_tokens=700,
                 )
-                backlog = response2["choices"][0]["message"]["content"]
+                backlog = response2.choices[0].message.content
             except Exception as e:
                 st.error(f"OpenAI error: {e}")
                 st.stop()
