@@ -4,7 +4,7 @@ import openai
 
 st.set_page_config(page_title="Feedback to Backlog Generator", layout="wide")
 
-st.title("📝 Consumer Feedback to Backlog Generator")
+st.title("📝 Consumer Feedback to Product Backlog Generator")
 
 st.markdown(
     """
